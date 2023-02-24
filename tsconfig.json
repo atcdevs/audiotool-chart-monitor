@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "baseUrl": ".",
+    "module": "node16",
+    "strict": true,
+    "target": "es6",
+    "typeRoots": ["./node_modules/@types", "./@types"]
+  }
+}
