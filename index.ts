@@ -16,6 +16,10 @@ const WEEK = (() => {
   const delta = (RUNTIME.valueOf() - basis.valueOf()) / 86_400_000;
   return Math.ceil((delta + basis.getDay() + 1) / 7);
 })();
+const FILENAME = (() => {
+  const [, month, day] = DATE.split("-");
+  return `${YEAR}-${`${WEEK}`.padStart(2, "0")} (${month}-${day}@${HOUR}).json`;
+})();
 
 const monitorCharts = async <T extends AxiosPromise<TrackList>>(
   trackList: T,
@@ -26,7 +30,7 @@ const monitorCharts = async <T extends AxiosPromise<TrackList>>(
 
   const rootDir = join(__dirname, "data", path);
   await mkdir(rootDir, { recursive: true });
-  const filename = join(rootDir, `${YEAR}-${WEEK} (${DATE}@${HOUR}).json`);
+  const filename = join(rootDir, FILENAME);
   const commitQuery = () => writeFile(filename, queryContent).then(() => true);
 
   const fileList = await readdir(rootDir);
