@@ -2,7 +2,7 @@
   "name": "audiotool-chart-analytics",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "@monitor/index.ts",
   "scripts": {
     "start": "node -r @swc-node/register ."
   },

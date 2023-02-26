@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import FSDB from "file-system-db";
 import { join } from "path";
-import { getCharts, getGenreCharts, getGenres } from "./helpers/api";
+import { getCharts, getGenreCharts, getGenres } from "./api";
 
 // Runtime constants
 const RUNTIME = new Date();
@@ -10,7 +10,6 @@ const WEEK_ID = format(RUNTIME, "yyyy-ww");
 interface Store {
   cache: {
     successfulRuns: string[];
-    test: string;
   };
   charts: {
     [uid: string]: {
@@ -21,8 +20,9 @@ interface Store {
 }
 
 function useStore<K extends keyof Store>(key: K, genre?: string) {
-  const path = `${key}/${genre ? `genre/${genre}` : "single"}.json`;
-  return new FSDB<Store[K]>(join(__dirname, "data", path));
+  const path = key === "cache" ?  "data/cache" : "data";
+  const file = `${genre ? `genre/${genre}` : "single"}.json`;
+  return new FSDB<Store[K]>(join(__dirname, path, file));
 }
 
 const checkCharts = (data: TrackList, genre?: string) => {

@@ -13,26 +13,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Store runtime 🕑
+        id: store-runtime
+        run: |
+          echo "runtime=$(/bin/date -u "+%Y-%W@%H")" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Checkout repository 🔍
         uses: actions/checkout@v3
 
-      - name: Setup Node.js environment
+      - name: Setup Node.js environment ⚙️
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Install pnpm
+      - name: Install pnpm ⬇️
         uses: pnpm/action-setup@v2
         with:
           version: 7
           run_install: false
 
-      - name: Get pnpm cache directory
+      - name: Store pnpm cache directory 💿
         id: pnpm-cache
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - name: Cache dependencies
+      - name: Cache dependencies 🗄️
         uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -40,13 +46,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install dependencies
+      - name: Install dependencies 📦
         run: pnpm install
 
-      - name: Run monitor
+      - name: Cache monitor data 📀
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-monitor-cache-${{ steps.store-runtime.outputs.runtime }}
+          path: |
+            @monitor/data/cache/**/*.json
+          restore-keys: |
+            ${{ runner.os }}-monitor-cache-
+
+      - name: Run monitor 👁️
         run: pnpm start
 
-      - name: Commit changes
+      - name: Commit changes 💾
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
