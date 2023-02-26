@@ -66,8 +66,8 @@ interface Track<K extends GenreKey = GenreKey> {
   license: number;
 }
 
-interface TrackList<N extends string = string> {
-  name: N;
+interface TrackList {
+  name: string;
   tracks: Track[];
   next?: string;
 }

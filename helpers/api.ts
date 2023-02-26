@@ -1,5 +1,4 @@
 import axios from "axios";
-import { createWeekId } from ".";
 
 const api = axios.create({
   baseURL: "https://api.audiotool.com",
@@ -19,22 +18,18 @@ api.interceptors.request.use(
   }
 );
 
-export const getCharts = (params?: Partial<TrackListQueryParameters>) =>
-  api.get<TrackList<"Single Charts">>("/tracks/charts.json", { params });
+export const getCharts = (params?: Partial<TrackListQueryParameters>) => {
+  params = { limit: 10, ...params };
+  return api.get<TrackList>("/tracks/charts.json", { params });
+};
 
-export const getGenreCharts = <
-  K extends GenreKey,
-  Y extends number,
-  W extends number
->(
-  key: string,
-  year: Y,
-  week: W,
+export const getGenreCharts = (
+  key: GenreKey,
+  weekId: string,
   params?: Partial<TrackListQueryParameters>
-) =>
-  api.get<TrackList<`${GenreMap[K]} charts, week #${W} / ${Y}`>>(
-    `/genre/${key}/charts/${createWeekId(year, week)}.json`,
-    { params }
-  );
+) => {
+  params = { limit: 10, ...params };
+  return api.get<TrackList>(`/genre/${key}/charts/${weekId}.json`, { params });
+};
 
 export const getGenres = () => api.get<GenreList>("/genres.json");
