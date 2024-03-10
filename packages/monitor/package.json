@@ -1,0 +1,16 @@
+{
+  "name": "@atcdevs/atcm-monitor",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "bun index.ts"
+  },
+  "dependencies": {
+    "@atcdevs/atcm-api": "workspace:^",
+    "@atcdevs/atcm-data": "workspace:^",
+    "date-fns": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.0.8"
+  }
+}
